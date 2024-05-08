@@ -1,20 +1,29 @@
 package com.example.project;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+
+
+
+
+@SuppressWarnings("FieldCanBeLocal")
+public class MainActivity extends AppCompatActivity implements JsonTask.JsonTaskListener  {
+
+
 
     private final String JSON_URL = "HTTPS_URL_TO_JSON_DATA_CHANGE_THIS_URL";
     private final String JSON_FILE = "mountains.json";
@@ -32,12 +41,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        items.add(new Mountain("Berf"));
-        items.add(new Mountain("Neft"));
-        items.add(new Mountain("Gurt"));
 
-        new JsonFile((Activity) this, (JsonTask.JsonTaskListener) this).execute(JSON_FILE);
-        //new JsonTask(this).execute(JSON_URL);
+
+        new JsonFile(this, this).execute(JSON_FILE);
 
 
         for (int i =0;i<items.size();i++) {
@@ -58,6 +64,20 @@ public class MainActivity extends AppCompatActivity {
         view.setAdapter(adapter);
 
 
+    }
+
+
+    @Override
+    public void onPostExecute(String json) {
+        gson = new Gson();
+
+        Log.d("MainActivity","" + json);
+
+        Type type = new TypeToken<List<Mountain>>() {}.getType();
+        items = gson.fromJson(json, type);
+        for (Mountain m : items) {
+            recyclerViewItems.add(new RecyclerViewItem(m.getName()));
+        }
     }
 
 }
