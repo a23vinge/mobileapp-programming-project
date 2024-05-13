@@ -2,6 +2,9 @@ package com.example.project;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,7 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
+import android.view.Menu;
+import android.view.MenuItem;
+import androidx.appcompat.widget.Toolbar;
 
 
 @SuppressWarnings("FieldCanBeLocal")
@@ -26,8 +31,9 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
 
 
     private final String JSON_URL = "HTTPS_URL_TO_JSON_DATA_CHANGE_THIS_URL";
-    private final String JSON_FILE = "mountains.json";
-    ArrayList<Mountain> items = new ArrayList<>();
+    private final String JSON_FILE = "Berry.json";
+    ArrayList<Berry> items = new ArrayList<>();
+    private WebView myWebView;
 
     ArrayList<RecyclerViewItem> recyclerViewItems = new ArrayList<>();
 
@@ -35,13 +41,28 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
     private RecyclerViewAdapter adapter;
 
     private Gson gson;
+    public void showExternalWebPage(){
+        // TODO: Add your code for showing external web page here
+        myWebView.loadUrl("file:///android_res/layout/activity_main.xml");
+    }
+
+    public void showInternalWebPage(){
+        // TODO: Add your code for showing internal web page here
+        myWebView.loadUrl("https://google.se");
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar toolbar=findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-
+        myWebView =  findViewById(R.id.my_webview) ;
+        myWebView.setWebViewClient(new WebViewClient());    // Do not open in Chrome!
+        WebSettings websettings= myWebView.getSettings();
+        websettings.setJavaScriptEnabled(true);
+        myWebView.loadUrl("file:///android_res/layout/activity_main.xml");
 
         new JsonFile(this, this).execute(JSON_FILE);
 
@@ -67,16 +88,48 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
     }
 
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_external_web) {
+            Log.d("==>","Will display external web page");
+            showExternalWebPage();
+            return true;
+        }
+
+        if (id == R.id.action_internal_web) {
+            Log.d("==>","Will display internal web page");
+            showInternalWebPage();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
     @Override
     public void onPostExecute(String json) {
         gson = new Gson();
 
         Log.d("MainActivity","" + json);
 
-        Type type = new TypeToken<List<Mountain>>() {}.getType();
+        Type type = new TypeToken<List<Berry>>() {}.getType();
         items = gson.fromJson(json, type);
-        for (Mountain m : items) {
-            recyclerViewItems.add(new RecyclerViewItem(m.getName()));
+        for (Berry b : items) {
+
         }
     }
 
