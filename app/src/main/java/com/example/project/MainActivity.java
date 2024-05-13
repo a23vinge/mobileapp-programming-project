@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
     public void showInternalWebPage(){
         // TODO: Add your code for showing internal web page here
         myWebView.loadUrl("https://google.se");
+
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
