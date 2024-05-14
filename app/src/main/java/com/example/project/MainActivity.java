@@ -1,14 +1,15 @@
 package com.example.project;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.webkit.WebSettings;
+
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.menu.MenuBuilder;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -42,14 +43,12 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
 
     private Gson gson;
     public void showExternalWebPage(){
-        // TODO: Add your code for showing external web page here
-        myWebView.loadUrl("file:///android_res/layout/activity_main.xml");
+        myWebView.loadUrl("file:///android_asset/about.html");
     }
 
     public void showInternalWebPage(){
-        // TODO: Add your code for showing internal web page here
-        myWebView.loadUrl("https://google.se");
-
+    Intent intent = new Intent(MainActivity.this, AboutActivity.class);
+    startActivity(intent);
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,10 +59,9 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
         setSupportActionBar(toolbar);
 
         myWebView =  findViewById(R.id.my_webview) ;
-        myWebView.setWebViewClient(new WebViewClient());    // Do not open in Chrome!
-        WebSettings websettings= myWebView.getSettings();
-        websettings.setJavaScriptEnabled(true);
-        myWebView.loadUrl("file:///android_res/layout/activity_main.xml");
+        myWebView.setWebViewClient(new WebViewClient());
+        myWebView.getSettings().setJavaScriptEnabled(true);
+        myWebView.loadUrl("file:///android_asset/about.html");
 
         new JsonFile(this, this).execute(JSON_FILE);
 
