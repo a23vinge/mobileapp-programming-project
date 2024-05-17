@@ -43,6 +43,6 @@ public class Berry {
 
     public String toString() {
 
-        return "The "+ category+ ": " +name+ " The Cost is"+ cost  ;
+        return "The "+ category+ ": " +name+ " The Cost is "+ cost+ " Kr" ;
     }
 }

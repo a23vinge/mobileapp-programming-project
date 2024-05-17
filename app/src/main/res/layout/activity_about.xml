@@ -31,7 +31,7 @@
     <WebView
         android:id="@+id/my_webview"
         android:layout_width="0dp"
-        android:layout_height="600dp"
+        android:layout_height="700dp"
         android:text="@string/app_name"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
